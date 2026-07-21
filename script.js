@@ -1,54 +1,138 @@
 const track = document.querySelector(".carousel-track");
 const images = document.querySelectorAll(".carousel-track img");
 
-let index = 0;
+const prev = document.getElementById("prev");
+const next = document.getElementById("next");
 
-function visible(){
-    return window.innerWidth <= 768 ? 1 : 4;
-}
-function update(){
-    const largura = images[0].getBoundingClientRect().width;
-    const espaco = 10; // mesmo valor do gap no CSS
+const notificacao = document.getElementById("notificacao");
 
-    track.style.transform = `translateX(-${index * (largura + espaco)}px)`;
-}
+let indice = 0;
+let imagensVisiveis = 4;
+let intervalo;
 
-function next(){
-    if(index < images.length - visible()){
-        index++;
+// Detecta automaticamente quantas imagens aparecem
+function atualizarQuantidade() {
+
+    if (window.innerWidth <= 768) {
+
+        imagensVisiveis = 1;
+
     } else {
-        index = 0;
+
+        imagensVisiveis = 4;
+
     }
 
-    update();
+    moverCarousel();
 }
 
-function prev(){
-    index--;
+window.addEventListener("resize", atualizarQuantidade);
 
-    if(index<0){
-        index=images.length-visible();
+function moverCarousel() {
+
+    const larguraImagem = images[0].offsetWidth + 18;
+
+    track.style.transform =
+        `translateX(-${indice * larguraImagem}px)`;
+
+}
+
+// Próxima imagem
+function proxima() {
+
+    indice++;
+
+    if (indice > images.length - imagensVisiveis) {
+
+        indice = 0;
+
     }
 
-    update();
+    moverCarousel();
+
 }
 
-document.getElementById("next").onclick=next;
-document.getElementById("prev").onclick=prev;
+// Imagem anterior
+function anterior() {
 
-setInterval(next,10000);
+    indice--;
 
-window.addEventListener("resize",update);
+    if (indice < 0) {
 
-update();
-window.onload = () => {
+        indice = images.length - imagensVisiveis;
 
-    const notificacao = document.getElementById("notificacao");
+    }
 
-    notificacao.classList.add("mostrar");
+    moverCarousel();
 
-    setTimeout(() => {
-        notificacao.classList.remove("mostrar");
-    }, 4000);
+}
 
-};
+next.addEventListener("click", () => {
+
+    proxima();
+    reiniciarTimer();
+
+});
+
+prev.addEventListener("click", () => {
+
+    anterior();
+    reiniciarTimer();
+
+});
+
+// Auto play
+function iniciarTimer() {
+
+    intervalo = setInterval(proxima, 5000);
+
+}
+
+// Reinicia quando clicar
+function reiniciarTimer() {
+
+    clearInterval(intervalo);
+
+    iniciarTimer();
+
+}
+
+// Pausa quando passa o mouse
+track.addEventListener("mouseenter", () => {
+
+    clearInterval(intervalo);
+
+});
+
+// Continua quando tira o mouse
+track.addEventListener("mouseleave", () => {
+
+    iniciarTimer();
+
+});
+
+// Notificação
+
+window.addEventListener("load", () => {
+
+    atualizarQuantidade();
+
+    iniciarTimer();
+
+    if (notificacao) {
+
+        setTimeout(() => {
+
+            notificacao.classList.add("mostrar");
+
+        }, 600);
+
+        setTimeout(() => {
+
+            notificacao.classList.remove("mostrar");
+
+        }, 4000);
+
+    }
+
+});
