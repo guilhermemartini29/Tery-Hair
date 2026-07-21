@@ -103,9 +103,9 @@ button:hover {
 .contatos {
     display: flex;
     justify-content: center;
-    gap: 15px;
+    gap: 5%;
     flex-wrap: wrap; /* No celular eles quebram para outra linha se necessário */
-    margin-top: 30px;
+    margin-top: 5%;
 }
 
 .btn {
