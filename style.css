@@ -360,22 +360,17 @@ button:hover{
    RODAPÉ
 =========================== */
 
-.rodape{
-    position:fixed;
+.rodape {
+    position: fixed;
+    bottom: 10px;
+    right: 15px;
 
-    bottom:12px;
-    right:18px;
+    font-size: 12px;
+    color: #888;
 
-    font-size:11px;
-    color:rgba(255,255,255,.45);
+    font-family: 'Poppins', sans-serif;
 
-    font-family:'Poppins', sans-serif;
-
-    letter-spacing:.5px;
-
-    z-index:999;
-
-    pointer-events:none;
+    z-index: 9999;
 }
 
 /* ===========================
